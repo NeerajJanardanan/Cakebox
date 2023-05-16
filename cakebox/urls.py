@@ -17,6 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import ObtainAuthToken
+
+from api import views
+
+router=DefaultRouter()
+router.register('api/register',views.UsersView,basename='users')
+router.register('api/cakes',views.CakesView,basename='cakes')
+router.register('api/carts',views.CartsView,basename='carts')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('api/token/',ObtainAuthToken.as_view())
+]+router.urls
