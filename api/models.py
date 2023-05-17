@@ -29,6 +29,10 @@ class Cake(models.Model):
     price=models.FloatField()
     image=models.ImageField(upload_to='images',blank=True,null=True)
 
+    @property
+    def reviews(self):
+        return Review.objects.filter(cake=self)
+
     def __str__(self) -> str:
         return self.name
     

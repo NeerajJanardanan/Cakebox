@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.decorators import action
 
-from api.serializers import UserSerializer,CakeSerializer,CartSerializer
-from api.models import Cake,Cart
+from api.serializers import UserSerializer,CakeSerializer,CartSerializer,OrderSerializer,ReviewSerializer
+from api.models import Cake,Cart,Order,Review
 
 
 # Create your views here.
@@ -31,11 +31,46 @@ class CakesView(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.RetrieveMod
             return Response(data=serializer.data)
         return Response(data=serializer.errors)
     
+#   url:'http://127.0.0.1:8000/api/cakes/:id/place_order/' 
+    @action(methods=['POST'],detail=True)
+    def place_order(self,request,*args,**kwargs):
+        serializer=OrderSerializer(data=request.data)
+        cake_obj=Cake.objects.get(id=kwargs.get('pk'))
+        user=request.user
+        if serializer.is_valid():
+            serializer.save(cake=cake_obj,user=user)
+            return Response(data=serializer.data)
+        return Response(data=serializer.errors)
+
+#   url:'http://127.0.0.1:8000/api/cakes/:id/add_review/' 
+    @action(methods=['POST'],detail=True)    
+    def add_review(self,request,*args,**kwargs):
+        serializer=ReviewSerializer(data=request.data)
+        cake_obj=Cake.objects.get(id=kwargs.get('pk'))
+        user=request.user
+        if serializer.is_valid():
+            serializer.save(cake=cake_obj,user=user)
+            return Response(data=serializer.data)
+        return Response(data=serializer.errors)        
+            
+    
 class CartsView(viewsets.GenericViewSet,mixins.ListModelMixin):
     serializer_class=CartSerializer
     queryset=Cart.objects.all()
 
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user)
+    
+class OrdersView(viewsets.GenericViewSet,mixins.ListModelMixin):
+    serializer_class=OrderSerializer
+    queryset=Order.objects.all()
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+    
+
+    
+
+    
 
 

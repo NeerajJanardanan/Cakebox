@@ -26,6 +26,7 @@ router=DefaultRouter()
 router.register('api/register',views.UsersView,basename='users')
 router.register('api/cakes',views.CakesView,basename='cakes')
 router.register('api/carts',views.CartsView,basename='carts')
+router.register('api/orders',views.OrdersView,basename='orders')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
