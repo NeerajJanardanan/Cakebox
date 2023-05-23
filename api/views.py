@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.decorators import action
+from rest_framework import authentication,permissions
 
 from api.serializers import UserSerializer,CakeSerializer,CartSerializer,OrderSerializer,ReviewSerializer
 from api.models import Cake,Cart,Order,Review
@@ -19,6 +20,8 @@ class UsersView(viewsets.GenericViewSet,mixins.CreateModelMixin):
 class CakesView(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.RetrieveModelMixin):
     serializer_class=CakeSerializer
     queryset=Cake.objects.all()
+    authentication_classes=[authentication.TokenAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
 
 #   url:'http://127.0.0.1:8000/api/cakes/:id/add_to_cart/' 
     @action(methods=['POST'],detail=True)
@@ -57,6 +60,8 @@ class CakesView(viewsets.GenericViewSet,mixins.ListModelMixin,mixins.RetrieveMod
 class CartsView(viewsets.GenericViewSet,mixins.ListModelMixin):
     serializer_class=CartSerializer
     queryset=Cart.objects.all()
+    authentication_classes=[authentication.TokenAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user)
@@ -64,6 +69,8 @@ class CartsView(viewsets.GenericViewSet,mixins.ListModelMixin):
 class OrdersView(viewsets.GenericViewSet,mixins.ListModelMixin):
     serializer_class=OrderSerializer
     queryset=Order.objects.all()
+    authentication_classes=[authentication.TokenAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)

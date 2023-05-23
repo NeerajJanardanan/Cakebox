@@ -20,6 +20,9 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 from api import views
 
 router=DefaultRouter()
@@ -31,4 +34,4 @@ router.register('api/orders',views.OrdersView,basename='orders')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/',ObtainAuthToken.as_view())
-]+router.urls
+]+router.urls+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
