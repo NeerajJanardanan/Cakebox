@@ -46,6 +46,11 @@ ADD REVIEW
   data:comment,rating
 
 
+List Categories
+  url:'http://127.0.0.1:8000/api/cakes/categories/'
+  method:get
+  authentication:Token Authentication
+
 
 
 
